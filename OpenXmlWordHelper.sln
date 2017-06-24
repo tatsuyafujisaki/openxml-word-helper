@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.6
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenXmlWordHelper", "OpenXmlWordHelper\OpenXmlWordHelper.csproj", "{7EEA76A5-EB47-42AF-A082-F23A086EBE03}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test1", "Test1\Test1.csproj", "{D0056F7C-47AF-43CF-B5B2-4D372FB13273}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7EEA76A5-EB47-42AF-A082-F23A086EBE03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7EEA76A5-EB47-42AF-A082-F23A086EBE03}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7EEA76A5-EB47-42AF-A082-F23A086EBE03}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7EEA76A5-EB47-42AF-A082-F23A086EBE03}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0056F7C-47AF-43CF-B5B2-4D372FB13273}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0056F7C-47AF-43CF-B5B2-4D372FB13273}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0056F7C-47AF-43CF-B5B2-4D372FB13273}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0056F7C-47AF-43CF-B5B2-4D372FB13273}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
