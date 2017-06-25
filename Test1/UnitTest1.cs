@@ -14,6 +14,12 @@ namespace Test1
     [TestClass]
     public class UnitTest1
     {
+        [ClassInitialize]
+        public static void Initialize(TestContext context)
+        {
+            Environment.CurrentDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+        }
+
         static void TestRunner(Action<MainDocumentPart> f)
         {
             var path = Path.Combine(Path.GetTempPath(), DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss-fffffff") + ".docx");
@@ -29,14 +35,24 @@ namespace Test1
             Process.Start(path);
         }
 
-        [TestMethod]
-        public static void TestAddParagraphPropertiesDefault() => TestRunner(Api.AddParagraphPropertiesDefault);
+        static void TestRunner(string path, Action<MainDocumentPart> f)
+        {
+            using (var wd = WordprocessingDocument.Open(path, true))
+            {
+                f(wd.MainDocumentPart);
+            }
+
+            Process.Start(path);
+        }
 
         [TestMethod]
-        public static void TestCreateWordWithParagraphPropertiesDefault() => TestRunner(Api.ClearHeaderFooter);
+        public void TestAddParagraphPropertiesDefault() => TestRunner(Api.AddParagraphPropertiesDefault);
 
         [TestMethod]
-        public static void TestCreateParagraphWithText()
+        public void TestCreateWordWithParagraphPropertiesDefault() => TestRunner(Api.ClearHeaderFooter);
+
+        [TestMethod]
+        public void TestCreateParagraphWithText()
         {
             TestRunner(mdp =>
             {
@@ -46,7 +62,7 @@ namespace Test1
         }
 
         [TestMethod]
-        public static void TestCreateNumberingParagraphs()
+        public void TestCreateNumberingParagraphs()
         {
             TestRunner(mdp =>
             {
@@ -70,7 +86,7 @@ namespace Test1
         }
 
         [TestMethod]
-        public static void TestMergeDocuments()
+        public void TestMergeDocuments()
         {
             const string path1 = "Source1.docx";
             const string path2 = "Source2.docx";
@@ -81,7 +97,7 @@ namespace Test1
         }
 
         [TestMethod]
-        public static void TestMergeDocumentsToNewFile()
+        public void TestMergeDocumentsToNewFile()
         {
             const string path1 = "Source1.docx";
             const string path2 = "Source2.docx";
@@ -93,13 +109,21 @@ namespace Test1
         }
 
         [TestMethod]
-        public static void TestProtectWord()
+        public void TestProtectWord()
         {
-            const string path = "Sample.docx";
+            const string path = @"Sample.docx";
 
             Api.ProtectWord(path, "dummy");
 
             Process.Start(path);
+        }
+
+        [TestMethod]
+        public void TestSetColumnJustification()
+        {
+            const string path = @"Sample.docx";
+
+            TestRunner(path, mdp => Api.SetColumnJustification(mdp, 2, JustificationValues.Right));
         }
     }
 }

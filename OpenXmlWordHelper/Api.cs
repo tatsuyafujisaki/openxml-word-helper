@@ -203,5 +203,28 @@ namespace OpenXmlWordHelper
                 }
             }
         }
+
+        // Colunn index is zero-based.
+        public static void SetColumnJustification(MainDocumentPart mdp, int columnIndex, JustificationValues jv)
+        {
+            foreach (var tr in mdp.Document.Body.GetFirstChild<Table>().Elements<TableRow>())
+            {
+                // If columnIndex = 0, "tr.Elements<TableCell>().ToList()[columnIndex]" can be simplified to "tr.GetFirstChild<TableCell>()".
+                var p = tr.Elements<TableCell>().ToList()[columnIndex].GetFirstChild<Paragraph>();
+
+                if (p.ParagraphProperties == null)
+                {
+                    p.PrependChild(new ParagraphProperties());
+                }
+
+                if (p.ParagraphProperties.Justification != null)
+                {
+                    // Ensure that all Justifications are removed though there shouldn't be more than one in theory.
+                    p.ParagraphProperties.RemoveAllChildren<Justification>();
+                }
+
+                p.ParagraphProperties.Justification = new Justification { Val = jv };
+            }
+        }
     }
 }
