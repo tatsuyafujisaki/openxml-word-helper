@@ -205,12 +205,13 @@ namespace OpenXmlWordHelper
         }
 
         // Colunn index is zero-based.
-        public static void SetColumnJustification(MainDocumentPart mdp, int columnIndex, JustificationValues jv)
+        public static void SetColumnJustification(Table table, int columnIndex, JustificationValues jv)
         {
-            foreach (var tr in mdp.Document.Body.GetFirstChild<Table>().Elements<TableRow>())
+            foreach (var tr in table.Elements<TableRow>())
             {
-                // If columnIndex = 0, "tr.Elements<TableCell>().ToList()[columnIndex]" can be simplified to "tr.GetFirstChild<TableCell>()".
-                var p = tr.Elements<TableCell>().ToList()[columnIndex].GetFirstChild<Paragraph>();
+                var tc = columnIndex == 0 ? tr.GetFirstChild<TableCell>() : tr.Elements<TableCell>().ToList()[columnIndex];
+
+                var p = tc.GetFirstChild<Paragraph>();
 
                 if (p.ParagraphProperties == null)
                 {

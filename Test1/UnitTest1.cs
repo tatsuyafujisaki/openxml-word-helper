@@ -5,12 +5,10 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenXmlWordHelper;
 using System;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
 namespace Test1
 {
-    [SuppressMessage("ReSharper", "PossiblyMistakenUseOfParamsMethod")]
     [TestClass]
     public class UnitTest1
     {
@@ -88,8 +86,8 @@ namespace Test1
         [TestMethod]
         public void TestMergeDocuments()
         {
-            const string path1 = "Source1.docx";
-            const string path2 = "Source2.docx";
+            var path1 = Io.Desktopize("Source1.docx");
+            var path2 = Io.Desktopize("Source2.docx");
 
             Api.MergeDocuments(path1, path2);
 
@@ -99,9 +97,9 @@ namespace Test1
         [TestMethod]
         public void TestMergeDocumentsToNewFile()
         {
-            const string path1 = "Source1.docx";
-            const string path2 = "Source2.docx";
-            const string path3 = "Destination.docx";
+            var path1 = Io.Desktopize("Source1.docx");
+            var path2 = Io.Desktopize("Source2.docx");
+            var path3 = Io.Desktopize("Destination.docx");
 
             Api.MergeDocuments(path1, path2, path3);
 
@@ -111,7 +109,7 @@ namespace Test1
         [TestMethod]
         public void TestProtectWord()
         {
-            const string path = @"Sample.docx";
+            var path = Io.Desktopize("Sample.docx");
 
             Api.ProtectWord(path, "dummy");
 
@@ -121,9 +119,9 @@ namespace Test1
         [TestMethod]
         public void TestSetColumnJustification()
         {
-            const string path = @"Sample.docx";
+            var path = Io.Desktopize("Sample.docx");
 
-            TestRunner(path, mdp => Api.SetColumnJustification(mdp, 2, JustificationValues.Right));
+            TestRunner(path, mdp => Api.SetColumnJustification(mdp.Document.Body.GetFirstChild<Table>(), 0, JustificationValues.Center));
         }
     }
 }
