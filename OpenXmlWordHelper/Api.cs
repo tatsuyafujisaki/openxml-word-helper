@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using Math = DocumentFormat.OpenXml.Math;
 
 namespace OpenXmlWordHelper
 {
@@ -13,6 +14,27 @@ namespace OpenXmlWordHelper
     [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
     public static class Api
     {
+        public static class Equation
+        {
+            public static Paragraph CreateEquation(string equation) =>
+                            new Paragraph(
+                                new Math.Paragraph(
+                                    new Math.OfficeMath(
+                                        new Math.Run(
+                                            new Math.RunProperties(
+                                                new Math.Text { Text = equation })))));
+
+            public static Paragraph CreateEquationInSpecifiedFont(string equation, string fontName) =>
+                new Paragraph(
+                    new Math.Paragraph(
+                        new Math.OfficeMath(
+                            new Math.Run(
+                                new Math.RunProperties(new Math.NormalText()),
+                                new RunFonts { Ascii = fontName, HighAnsi = fontName, EastAsia = fontName, ComplexScript = fontName },
+                                new Math.Text { Text = equation }))));
+
+        }
+
         public static Paragraph CreateParagraphWithText(string s) => new Paragraph(new Run(new Text(s)));
 
         public static void ProtectWord(string path, string password)

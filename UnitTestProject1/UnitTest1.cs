@@ -7,16 +7,13 @@ using System;
 using System.Diagnostics;
 using System.IO;
 
-namespace Test1
+namespace UnitTestProject1
 {
     [TestClass]
     public class UnitTest1
     {
         [ClassInitialize]
-        public static void Initialize(TestContext context)
-        {
-            Environment.CurrentDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-        }
+        public static void Initialize(TestContext context) => Environment.CurrentDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
 
         static void TestRunner(Action<MainDocumentPart> f)
         {
@@ -50,14 +47,12 @@ namespace Test1
         public void TestCreateWordWithParagraphPropertiesDefault() => TestRunner(Api.ClearHeaderFooter);
 
         [TestMethod]
-        public void TestCreateParagraphWithText()
-        {
+        public void TestCreateParagraphWithText() =>
             TestRunner(mdp =>
             {
                 mdp.Document.Body.AppendChild(Api.CreateParagraphWithText("Hello"));
                 mdp.Document.Body.AppendChild(Api.CreateParagraphWithText("Word"));
             });
-        }
 
         [TestMethod]
         public void TestCreateNumberingParagraphs()
@@ -86,8 +81,8 @@ namespace Test1
         [TestMethod]
         public void TestMergeDocuments()
         {
-            var path1 = Io.Desktopize("Source1.docx");
-            var path2 = Io.Desktopize("Source2.docx");
+            const string path1 = "Source1.docx";
+            const string path2 = "Source2.docx";
 
             Api.MergeDocuments(path1, path2);
 
@@ -97,9 +92,9 @@ namespace Test1
         [TestMethod]
         public void TestMergeDocumentsToNewFile()
         {
-            var path1 = Io.Desktopize("Source1.docx");
-            var path2 = Io.Desktopize("Source2.docx");
-            var path3 = Io.Desktopize("Destination.docx");
+            const string path1 = "Source1.docx";
+            const string path2 = "Source2.docx";
+            const string path3 = "Destination.docx";
 
             Api.MergeDocuments(path1, path2, path3);
 
@@ -109,7 +104,7 @@ namespace Test1
         [TestMethod]
         public void TestProtectWord()
         {
-            var path = Io.Desktopize("Sample.docx");
+            const string path = "Sample.docx";
 
             Api.ProtectWord(path, "dummy");
 
@@ -119,9 +114,23 @@ namespace Test1
         [TestMethod]
         public void TestSetColumnJustification()
         {
-            var path = Io.Desktopize("Sample.docx");
+            const string path = "Sample.docx";
 
             TestRunner(path, mdp => Api.SetColumnJustification(mdp.Document.Body.GetFirstChild<Table>(), 0, JustificationValues.Center));
         }
+
+        [TestMethod]
+        public void TestCreateEquation() =>
+            TestRunner(mdp =>
+            {
+                mdp.Document.Body.AppendChild(Api.Equation.CreateEquation("1 + 1 = 2"));
+            });
+
+        [TestMethod]
+        public void TestCreateEquationInSpecifiedFont() =>
+            TestRunner(mdp =>
+            {
+                mdp.Document.Body.AppendChild(Api.Equation.CreateEquationInSpecifiedFont("1 + 1 = 2", "Yu Gothic UI"));
+            });
     }
 }
