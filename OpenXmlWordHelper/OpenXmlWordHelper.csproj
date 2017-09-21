@@ -49,8 +49,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="LevelFactory.cs" />
+    <Compile Include="OpenXmlElementHelper.cs" />
+    <Compile Include="ParagraphPropertiesHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Api.cs" />
+    <Compile Include="RuPropertiesHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
