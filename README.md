@@ -5,6 +5,7 @@
 * Use only AppendChild(...) rather than mix PrependChild(...) and AppendChild(...)
 * ParagraphProperties must come before Paragraph to take effect.
 * RunProperties must come before Run to take effect.
+* FirstLinecChars and HangingChars of the Indentation class are mutually exclusive.
 
 ###### Getter methods of OpenXmlElement
 |Method|Meaning|
