@@ -35,8 +35,6 @@ namespace OpenXmlWordHelper
 
         }
 
-        public static Paragraph CreateParagraphWithText(string s) => new Paragraph(new Run(new Text(s)));
-
         public static void ProtectWord(string path, string password)
         {
             string CreateSalt()
@@ -165,9 +163,9 @@ namespace OpenXmlWordHelper
 
             var an = new AbstractNum { AbstractNumberId = abstractNumId };
 
-            an.Append(LevelFactory.CreateLevel(NumberFormatValues.Decimal, 720, 360));
-            an.Append(LevelFactory.CreateLevel(NumberFormatValues.Decimal, 720 * 2, 360));
-            an.Append(LevelFactory.CreateLevel(NumberFormatValues.Decimal, 720 * 3, 360));
+            an.AppendChild(LevelFactory.CreateLevel(NumberFormatValues.Decimal, 720, 360));
+            an.AppendChild(LevelFactory.CreateLevel(NumberFormatValues.Decimal, 720 * 2, 360));
+            an.AppendChild(LevelFactory.CreateLevel(NumberFormatValues.Decimal, 720 * 3, 360));
 
             return an;
         }
@@ -235,18 +233,8 @@ namespace OpenXmlWordHelper
 
                 var p = tc.GetFirstChild<Paragraph>();
 
-                if (p.ParagraphProperties == null)
-                {
-                    p.PrependChild(new ParagraphProperties());
-                }
-
-                if (p.ParagraphProperties.Justification != null)
-                {
-                    // Ensure that all Justifications are removed though there shouldn't be more than one in theory.
-                    p.ParagraphProperties.RemoveAllChildren<Justification>();
-                }
-
-                p.ParagraphProperties.Justification = new Justification { Val = jv };
+                OpenXmlElementHelper.SetChildIfNotExists<ParagraphProperties>(p);
+                OpenXmlElementHelper.SetChild(p.GetFirstChild<ParagraphProperties>(), new Justification { Val = jv });
             }
         }
     }

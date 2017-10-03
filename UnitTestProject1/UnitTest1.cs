@@ -41,18 +41,23 @@ namespace UnitTestProject1
         }
 
         [TestMethod]
+        public void TestCreateParagraphProperties() =>
+            TestRunner(mdp =>
+            {
+                var pp = new ParagraphProperties();
+                ParagraphPropertiesHelper.SetParagraphProperties(pp, 10, new FirstLineOrHangingChars(FirstLineOrHanging.FirstLine, 10), 1000, JustificationValues.Both);
+                var p = new Paragraph();
+                OpenXmlElementHelper.SetChild(p, pp);
+                OpenXmlElementHelper.SetChild(p, new Run(new Text("Hello world!")));
+                OpenXmlElementHelper.SetChild(mdp.Document.Body, p);
+            });
+
+
+        [TestMethod]
         public void TestAddParagraphPropertiesDefault() => TestRunner(Api.AddParagraphPropertiesDefault);
 
         [TestMethod]
         public void TestCreateWordWithParagraphPropertiesDefault() => TestRunner(Api.ClearHeaderFooter);
-
-        [TestMethod]
-        public void TestCreateParagraphWithText() =>
-            TestRunner(mdp =>
-            {
-                mdp.Document.Body.AppendChild(Api.CreateParagraphWithText("Hello"));
-                mdp.Document.Body.AppendChild(Api.CreateParagraphWithText("Word"));
-            });
 
         [TestMethod]
         public void TestCreateNumberingParagraphs()

@@ -1,18 +1,37 @@
 ﻿using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Wordprocessing;
 using System.Collections.Generic;
+using System.ComponentModel;
 using JustificationValues = DocumentFormat.OpenXml.Wordprocessing.JustificationValues;
 using ParagraphProperties = DocumentFormat.OpenXml.Wordprocessing.ParagraphProperties;
 
 namespace OpenXmlWordHelper
 {
-    static class ParagraphPropertiesHelper
+    public enum FirstLineOrHanging
     {
-        internal static void SetParagraphProperties(ParagraphProperties p, int? leftChars, int? firstLineChars, int? hangingChars, int? spaceBetweenLines, JustificationValues? jv)
+        FirstLine,
+        Hanging
+    }
+
+    public class FirstLineOrHangingChars
+    {
+        internal readonly FirstLineOrHanging Floh;
+        internal readonly int Chars;
+
+        public FirstLineOrHangingChars(FirstLineOrHanging floh, int chars)
+        {
+            this.Floh = floh;
+            this.Chars = chars;
+        }
+    }
+
+    public static class ParagraphPropertiesHelper
+    {
+        public static void SetParagraphProperties(ParagraphProperties p, int? leftChars, FirstLineOrHangingChars firstLineOrhangingChars, int? spaceBetweenLines, JustificationValues? jv)
         {
             var oxes = new List<OpenXmlElement>();
 
-            if (leftChars != null || firstLineChars != null || hangingChars != null)
+            if (leftChars != null || firstLineOrhangingChars != null)
             {
                 var indent = new Indentation();
 
@@ -21,14 +40,19 @@ namespace OpenXmlWordHelper
                     indent.LeftChars = leftChars.Value;
                 }
 
-                if (firstLineChars != null)
+                if (firstLineOrhangingChars != null)
                 {
-                    indent.FirstLineChars = firstLineChars.Value;
-                }
-
-                if (hangingChars != null)
-                {
-                    indent.HangingChars = hangingChars.Value;
+                    switch (firstLineOrhangingChars.Floh)
+                    {
+                        case FirstLineOrHanging.FirstLine:
+                            indent.FirstLineChars = firstLineOrhangingChars.Chars;
+                            break;
+                        case FirstLineOrHanging.Hanging:
+                            indent.HangingChars = firstLineOrhangingChars.Chars;
+                            break;
+                        default:
+                            throw new InvalidEnumArgumentException(firstLineOrhangingChars.Floh.ToString());
+                    }
                 }
 
                 oxes.Add(indent);
@@ -47,7 +71,7 @@ namespace OpenXmlWordHelper
             OpenXmlElementHelper.SetChild(p, new ParagraphProperties(oxes));
         }
 
-        internal static void SetIndent(ParagraphProperties pp, int? leftChars, int? firstLineChars, int? hangingChars)
+        public static void SetIndent(ParagraphProperties pp, int? leftChars, FirstLineOrHangingChars firstLineOrhangingChars)
         {
             var indent = new Indentation();
 
@@ -56,25 +80,30 @@ namespace OpenXmlWordHelper
                 indent.LeftChars = leftChars.Value;
             }
 
-            if (firstLineChars != null)
+            if (firstLineOrhangingChars != null)
             {
-                indent.FirstLineChars = firstLineChars.Value;
-            }
-
-            if (hangingChars != null)
-            {
-                indent.HangingChars = hangingChars.Value;
+                switch (firstLineOrhangingChars.Floh)
+                {
+                    case FirstLineOrHanging.FirstLine:
+                        indent.FirstLineChars = firstLineOrhangingChars.Chars;
+                        break;
+                    case FirstLineOrHanging.Hanging:
+                        indent.HangingChars = firstLineOrhangingChars.Chars;
+                        break;
+                    default:
+                        throw new InvalidEnumArgumentException(firstLineOrhangingChars.Floh.ToString());
+                }
             }
 
             OpenXmlElementHelper.SetChild(pp, indent);
         }
 
-        internal static void SetSpacinggBetweenLines(ParagraphProperties pp, int space)
+        public static void SetSpacinggBetweenLines(ParagraphProperties pp, int space)
         {
             OpenXmlElementHelper.SetChild(pp, new SpacingBetweenLines { LineRule = LineSpacingRuleValues.Auto, Line = space.ToString() });
         }
 
-        internal static void SetJustification(ParagraphProperties pp, JustificationValues jv)
+        public static void SetJustification(ParagraphProperties pp, JustificationValues jv)
         {
             OpenXmlElementHelper.SetChild(pp, new Justification { Val = jv });
         }
