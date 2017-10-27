@@ -89,6 +89,11 @@ namespace UnitTestProject1
             const string path1 = "Source1.docx";
             const string path2 = "Source2.docx";
 
+            if (!(File.Exists(path1) && File.Exists(path2)))
+            {
+                return;
+            }
+
             Api.MergeDocuments(path1, path2);
 
             Process.Start(path1);
@@ -101,6 +106,11 @@ namespace UnitTestProject1
             const string path2 = "Source2.docx";
             const string path3 = "Destination.docx";
 
+            if (!(File.Exists(path1) && File.Exists(path2)))
+            {
+                return;
+            }
+
             Api.MergeDocuments(path1, path2, path3);
 
             Process.Start(path3);
@@ -111,6 +121,11 @@ namespace UnitTestProject1
         {
             const string path = "Sample.docx";
 
+            if (!File.Exists(path))
+            {
+                return;
+            }
+            
             Api.ProtectWord(path, "dummy");
 
             Process.Start(path);
@@ -120,6 +135,11 @@ namespace UnitTestProject1
         public void TestSetColumnJustification()
         {
             const string path = "Sample.docx";
+
+            if (!File.Exists(path))
+            {
+                return;
+            }
 
             TestRunner(path, mdp => Api.SetColumnJustification(mdp.Document.Body.GetFirstChild<Table>(), 0, JustificationValues.Center));
         }
