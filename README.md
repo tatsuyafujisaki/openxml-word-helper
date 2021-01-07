@@ -1,5 +1,3 @@
-[![Build status](https://ci.appveyor.com/api/projects/status/q3f9vpm36k75501c?svg=true)](https://ci.appveyor.com/project/tatsuya/open-xml-word-helper)
-
 # Note
 * OOXML has both non-generic methods and their non-generic methods. Ignore non-generic ones because you are interested in specific types in most cases.
 * Use only `AppendChild(...)` rather than a mixture of `PrependChild(...)` and `AppendChild(...)`
